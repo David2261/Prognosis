@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "prognosis"
+version = "0.1.0"
+description = "A unified platform for financial planning with ERP/CRM/bank integrations, workflow automation, interactive dashboards, version control, and data quality monitoring."
+authors = ["Bulat Nasyrov <bulatnasirov2003@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+django = "^5.2.8"
+djangorestframework = "^3.16.1"
+django-environ = "^0.12.0"
+django-cors-headers = "^4.9.0"
+flake8 = "^7.3.0"
+djangorestframework-simplejwt = "^5.5.1"
+psycopg2-binary = "^2.9.11"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

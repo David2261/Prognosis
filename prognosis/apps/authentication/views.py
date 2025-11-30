@@ -5,8 +5,9 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from django.contrib.auth import authenticate
 from rest_framework_simplejwt.tokens import RefreshToken
 from prognosis.settings import DEBUG
-from .models import User
+# from .models import User
 from .serializers import LoginSerializer, UserSerializer
+
 
 class LoginView(APIView):
 	permission_classes = [AllowAny]
@@ -45,7 +46,7 @@ class LoginView(APIView):
 			httponly=True,
 			secure=not request.is_secure() if DEBUG else True,
 			samesite='Lax',
-			max_age=15*60
+			max_age=15 * 60
 		)
 		response.set_cookie(
 			key='refresh',
@@ -53,7 +54,7 @@ class LoginView(APIView):
 			httponly=True,
 			secure=not request.is_secure() if DEBUG else True,
 			samesite='Lax',
-			max_age=7*24*60*60
+			max_age=7 * 24 * 60 * 60
 		)
 
 		return response
@@ -68,12 +69,16 @@ class LogoutView(APIView):
 			token = RefreshToken(refresh_token)
 			token.blacklist()
 
-			response = Response({"detail": "Успешный выход"}, status=status.HTTP_205_RESET_CONTENT)
+			response = Response(
+				{"detail": "Успешный выход"},
+				status=status.HTTP_205_RESET_CONTENT)
 			response.delete_cookie('access')
 			response.delete_cookie('refresh')
 			return response
-		except Exception as e:
-			return Response({"detail": "Ошибка выхода"}, status=status.HTTP_400_BAD_REQUEST)
+		except Exception:
+			return Response(
+				{"detail": "Ошибка выхода"},
+				status=status.HTTP_400_BAD_REQUEST)
 
 
 class UserView(APIView):

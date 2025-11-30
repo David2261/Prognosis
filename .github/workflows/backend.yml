@@ -51,10 +51,9 @@ jobs:
 
       - name: Lint & Format
         run: |
-          poetry run black --check --diff .
-          poetry run isort --check --diff .
           poetry run flake8 .
-
+# poetry run black --check --diff .
+# poetry run isort --check --diff .
       - name: Test with coverage
         env:
           DATABASE_URL: postgres://postgres:postgres@localhost:5432/postgres

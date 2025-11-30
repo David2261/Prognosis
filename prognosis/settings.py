@@ -1,4 +1,4 @@
-import os, sys
+import sys
 from pathlib import Path
 from datetime import timedelta
 import environ
@@ -70,7 +70,7 @@ SIMPLE_JWT = {
 
 	'AUTH_HEADER_TYPES': ('Bearer',),
 	'AUTH_HEADER_NAME': 'HTTP_AUTHORIZATION',
-	
+
 	# Настройки для HttpOnly куки
 	'AUTH_COOKIE': 'access',
 	'AUTH_COOKIE_REFRESH': 'refresh',
@@ -122,9 +122,6 @@ DATABASES = {
 	}
 }
 
-
-# Password validation
-# https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
 	{

@@ -28,3 +28,18 @@ pytest-cov = "^7.0.0"
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+
+[tool.coverage.run]
+omit = [
+    "*/tests/*",
+    "*/migrations/*",
+    "manage.py",
+    "prognosis/asgi.py",
+    "prognosis/wsgi.py",
+    "*/__init__.py",
+]
+
+[tool.coverage.report]
+show_missing = true
+fail_under = 70

@@ -34,7 +34,7 @@ INSTALLED_APPS = [
 	'rest_framework_simplejwt',
 	'corsheaders',
 
-	'apps.authentication',
+	'prognosis.apps.authentication',
 ]
 
 MIDDLEWARE = [

@@ -36,6 +36,10 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 	def __str__(self):
 		return self.email
+	
+	class Meta:
+		verbose_name = 'User'
+		verbose_name_plural = 'Users'
 
 
 class Role(models.Model):

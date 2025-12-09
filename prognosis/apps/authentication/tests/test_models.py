@@ -1,10 +1,9 @@
 import pytest
 from django.contrib.auth import get_user_model
-from prognosis.apps.authentication.models import Role, UserRole
+from apps.authentication.models import Role, UserRole
 
 
 User = get_user_model()
-
 
 @pytest.mark.django_db
 class TestUserManager:

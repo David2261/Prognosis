@@ -1,7 +1,7 @@
 import pytest
 from django.contrib.auth import get_user_model
 from rest_framework.test import APIRequestFactory, force_authenticate
-from prognosis.apps.authentication.views import LoginView, LogoutView, UserView
+from apps.authentication.views import LoginView, LogoutView, UserView
 
 User = get_user_model()
 
@@ -23,7 +23,7 @@ class TestAuthViews:
 			def for_user(cls, _user):
 				return DummyRefresh()
 
-		monkeypatch.setattr('prognosis.apps.authentication.views.RefreshToken', DummyRT)
+		monkeypatch.setattr('apps.authentication.views.RefreshToken', DummyRT)
 
 		factory = APIRequestFactory()
 		request = factory.post('/login/', {'email': 'test@example.com', 'password': 'testpass123'}, format='json')
@@ -58,7 +58,7 @@ class TestAuthViews:
 				called['blacklisted'] = True
 
 		# Возвращаем объект с методом blacklist при вызове RefreshToken(...)
-		monkeypatch.setattr('prognosis.apps.authentication.views.RefreshToken', lambda token: DummyToken(token))
+		monkeypatch.setattr('apps.authentication.views.RefreshToken', lambda token: DummyToken(token))
 
 		factory = APIRequestFactory()
 		request = factory.post('/logout/', {}, format='json')
@@ -75,7 +75,7 @@ class TestAuthViews:
 		def bad_init(token):
 			raise Exception("bad token")
 
-		monkeypatch.setattr('prognosis.apps.authentication.views.RefreshToken', lambda token: (_ for _ in ()).throw(Exception("bad token")))
+		monkeypatch.setattr('apps.authentication.views.RefreshToken', lambda token: (_ for _ in ()).throw(Exception("bad token")))
 
 		user = User.objects.create_user(email='test2@example.com', password='testpass123')
 		factory = APIRequestFactory()

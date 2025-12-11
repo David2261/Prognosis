@@ -5,6 +5,7 @@ from apps.authentication.models import Role, UserRole
 
 User = get_user_model()
 
+
 @pytest.mark.django_db
 class TestUserManager:
 	def test_create_user_success(self):

@@ -5,14 +5,17 @@ from django.shortcuts import render
 from unfold.views import UnfoldModelAdminViewMixin
 from unfold.widgets import (
 	UnfoldAdminTextInputWidget,
+	UnfoldAdminExpandableTextareaWidget,
+	UnfoldAdminDateWidget,
 )
-from django.contrib.auth import get_user_model
 
-from .models import Role, UserRole
+from .models import Company, UserCompanyRole
 
 
 _FORMFIELD_OVERRIDES = {
 	models.CharField: {"widget": UnfoldAdminTextInputWidget},
+	models.TextField: {"widget": UnfoldAdminExpandableTextareaWidget},
+	models.DateField: {"widget": UnfoldAdminDateWidget},
 }
 
 
@@ -28,10 +31,19 @@ class UnfoldListView(UnfoldModelAdminViewMixin):
 		return render(request, self.template_name, context)
 
 
-@admin.register(Role)
-class RoleAdmin(admin.ModelAdmin):
-	list_display = ("name", "description")
-	search_fields = ("name",)
+@admin.register(Company)
+class CompanyAdmin(admin.ModelAdmin):
+	list_display = (
+		"name",
+		"slug",
+		"inn",
+		"currency_default",
+		"fiscal_year_start",
+		"is_active",
+		"created_at")
+	list_filter = ("is_active", "currency_default", "fiscal_year_start")
+	search_fields = ("name", "inn")
+	readonly_fields = ("created_at", "updated_at", "slug")
 	formfield_overrides = _FORMFIELD_OVERRIDES
 
 	def get_urls(self):
@@ -40,28 +52,13 @@ class RoleAdmin(admin.ModelAdmin):
 			"unfold/",
 			self.admin_site.admin_view(
 				lambda request: UnfoldListView(self).get(request)),
-			name="authentication_role_unfold")]
+			name="accounts_company_unfold")]
 		return custom + urls
 
 
-@admin.register(UserRole)
-class UserRoleAdmin(admin.ModelAdmin):
-	list_display = ("user", "role")
-	search_fields = ("user__email", "role__name")
-	formfield_overrides = _FORMFIELD_OVERRIDES
-
-
-User = get_user_model()
-
-
-@admin.register(User)
-class UserAdmin(admin.ModelAdmin):
-	list_display = (
-		"email",
-		"full_name",
-		"is_active",
-		"is_staff",
-		"created_at")
-	search_fields = ("email", "full_name")
-	readonly_fields = ("created_at", "updated_at")
+@admin.register(UserCompanyRole)
+class UserCompanyRoleAdmin(admin.ModelAdmin):
+	list_display = ("user", "company", "role")
+	list_filter = ("role", "company")
+	search_fields = ("user__email", "user__username", "company__name")
 	formfield_overrides = _FORMFIELD_OVERRIDES

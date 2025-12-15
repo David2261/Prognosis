@@ -18,6 +18,10 @@ class TestUserManager:
 		with pytest.raises(ValueError):
 			User.objects.create_user(email='', password='testpass123')
 
+	def test_create_user_without_password_sets_unusable(self):
+		user = User.objects.create_user(email='nopass@example.com', password=None)
+		assert user.has_usable_password() is False
+
 	def test_create_user_normalizes_email(self):
 		user = User.objects.create_user(email='TEST@EXAMPLE.COM', password='testpass123')
 		assert user.email == 'TEST@example.com'
@@ -26,6 +30,10 @@ class TestUserManager:
 		user = User.objects.create_superuser(email='admin@example.com', password='testpass123')
 		assert user.is_staff is True
 		assert user.is_superuser is True
+
+	def test_create_superuser_requires_email(self):
+		with pytest.raises(ValueError):
+			User.objects.create_superuser(email='', password='pw')
 
 	def test_create_user_with_extra_fields(self):
 		user = User.objects.create_user(email='test@example.com', password='testpass123', full_name='John Doe')

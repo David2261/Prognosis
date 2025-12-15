@@ -15,6 +15,7 @@ flake8 = "^7.3.0"
 djangorestframework-simplejwt = "^5.5.1"
 psycopg2-binary = "^2.9.11"
 gunicorn = "^23.0.0"
+django-unfold = "^0.73.1"
 
 [tool.poetry.group.dev.dependencies]
 flake8 = "^7.3.0"

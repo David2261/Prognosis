@@ -1,0 +1,24 @@
+{% load i18n unfold_extras %}
+{% block content %}
+<h1>{{ title }}</h1>
+<table class="adminlist">
+    <thead>
+        <tr>
+            {% for h in model_admin.list_display %}
+            <th>{{ h }}</th>
+            {% endfor %}
+        </tr>
+    </thead>
+    <tbody>
+        {% for obj in object_list %}
+        <tr>
+            {% for field in model_admin.list_display %}
+            <td>{{ obj|getattr:field }}</td>
+            {% endfor %}
+        </tr>
+        {% empty %}
+        <tr><td colspan="{{ model_admin.list_display|length }}">No items</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

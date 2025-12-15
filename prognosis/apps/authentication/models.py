@@ -37,6 +37,21 @@ class User(AbstractBaseUser, PermissionsMixin):
 	def __str__(self):
 		return self.email
 
+	def get_full_name(self):
+		"""Return the full name for the user."""
+		return self.full_name or self.email
+
+	def get_short_name(self):
+		"""Return a short name for the user."""
+		if self.full_name:
+			return self.full_name.split(' ')[0]
+		return self.email
+
+	@property
+	def username(self):
+		"""Compatibility property for code expecting `user.username`."""
+		return self.email
+
 	class Meta:
 		verbose_name = 'User'
 		verbose_name_plural = 'Users'

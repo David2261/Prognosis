@@ -1,7 +1,7 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from treebeard.mp_tree import MP_Node
-from apps.core.models import CompanyRelatedModel
+from core.models import CompanyRelatedModel
 
 
 class ChartOfAccounts(CompanyRelatedModel):
@@ -136,7 +136,7 @@ class CostCenter(CompanyRelatedModel):
 		super().save(*args, **kwargs)
 
 
-class Department(MP_Node):
+class Department(MP_Node, CompanyRelatedModel):
 	"""Подразделения — иерархические"""
 	company = models.ForeignKey("accounts.Company", on_delete=models.CASCADE)
 	code = models.CharField(_("Код"), max_length=50)
@@ -149,9 +149,10 @@ class Department(MP_Node):
 		on_delete=models.SET_NULL,
 		verbose_name=_("Руководитель"))
 
-	class Meta:
+	class Meta(MP_Node.Meta, CompanyRelatedModel.Meta):
 		verbose_name = _("Подразделение")
 		verbose_name_plural = _("Подразделения")
+		unique_together = ("company", "code")
 
 	def __str__(self):
 		return self.name

@@ -1,7 +1,7 @@
 import pytest
-from apps.core.periods import generate_periods_for_year
-from apps.accounts.models import Company
-from apps.core.models import TimePeriod
+from core.periods import generate_periods_for_year
+from accounts.models import Company
+from core.models import TimePeriod
 
 
 @pytest.mark.django_db

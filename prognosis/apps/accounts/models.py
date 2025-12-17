@@ -2,7 +2,7 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django.core.validators import MinLengthValidator
 from django.utils.text import slugify
-from apps.core.models import TimeStampedModel
+from core.models import TimeStampedModel
 import datetime
 
 
@@ -79,8 +79,14 @@ class Company(TimeStampedModel):
 		return slug
 
 	def save(self, *args, **kwargs):
-		if not self.slug:
-			self.slug = self._generate_unique_slug()
+		if not self.slug or not self.pk:
+			base = slugify(self.name) or "company"
+			slug = base
+			i = 1
+			while Company.objects.exclude(pk=self.pk).filter(slug=slug).exists():
+				slug = f"{base}-{i}"
+				i += 1
+			self.slug = slug
 		super().save(*args, **kwargs)
 
 

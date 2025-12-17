@@ -1,9 +1,9 @@
 import pytest
 from django.contrib.auth import get_user_model
 from rest_framework.test import APIRequestFactory, force_authenticate
-from apps.accounts.models import Company
-from apps.dimensions.models import ChartOfAccounts, CostCenter, Department, Project
-from apps.dimensions.views import (
+from accounts.models import Company
+from dimensions.models import ChartOfAccounts, CostCenter, Department, Project
+from dimensions.views import (
 	ChartOfAccountsListCreateView, ChartOfAccountsDetailView,
 	BudgetArticleListCreateView, BudgetArticleDetailView,
 	CostCenterDetailView, DepartmentDetailView,

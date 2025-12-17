@@ -1,8 +1,8 @@
 import pytest
 from django.contrib.auth import get_user_model
 from rest_framework.test import APIRequestFactory, force_authenticate
-from apps.accounts.models import Company
-from apps.accounts.views import CompanyListCreateView, CompanyDetailView, CompanyRolesListView
+from accounts.models import Company
+from accounts.views import CompanyListCreateView, CompanyDetailView, CompanyRolesListView
 
 User = get_user_model()
 

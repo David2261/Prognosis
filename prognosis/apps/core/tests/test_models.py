@@ -1,16 +1,10 @@
 import pytest
-from apps.core.models import TimePeriod, Scenario
-from apps.accounts.models import Company
+from core.models import TimePeriod, Scenario
+from accounts.models import Company
 
 
 @pytest.mark.django_db
 class TestTimePeriodModel:
-    def test_month_requires_quarter(self):
-        c = Company.objects.create(name='TCo')
-        tp = TimePeriod(company=c, year=2025, month=3)
-        with pytest.raises(Exception):
-            tp.full_clean()
-
     def test_quarter_month_consistency(self):
         c = Company.objects.create(name='TCo2')
         tp = TimePeriod(company=c, year=2025, month=2, quarter=2)

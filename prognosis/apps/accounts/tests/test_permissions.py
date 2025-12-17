@@ -1,8 +1,8 @@
 import pytest
 from types import SimpleNamespace
 from django.contrib.auth import get_user_model
-from apps.accounts.models import Company
-from apps.accounts.permissions import IsInCompany
+from accounts.models import Company
+from accounts.permissions import IsInCompany
 
 User = get_user_model()
 

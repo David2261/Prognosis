@@ -1,7 +1,7 @@
 import pytest
-from apps.core.managers import ActiveScenarioManager, OpenPeriodManager
-from apps.core.models import Scenario, TimePeriod
-from apps.accounts.models import Company
+from core.managers import ActiveScenarioManager, OpenPeriodManager
+from core.models import Scenario, TimePeriod
+from accounts.models import Company
 
 
 @pytest.mark.django_db

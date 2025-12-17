@@ -6,9 +6,7 @@ import environ
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 APPS_DIR = Path(__file__).resolve().parent
-
-if str(APPS_DIR) not in sys.path:
-	sys.path.insert(0, str(APPS_DIR))
+sys.path.insert(0, str(APPS_DIR / 'apps'))
 
 env = environ.Env()
 environ.Env.read_env(BASE_DIR / '.env')
@@ -33,10 +31,11 @@ INSTALLED_APPS = [
 	'rest_framework_simplejwt',
 	'corsheaders',
 
-	'apps.authentication',
-	'apps.accounts',
-	'apps.core',
-	'apps.dimensions',
+	'authentication.apps.AuthenticationConfig',
+	'accounts.apps.AccountsConfig',
+	'core.apps.CoreConfig',
+	'dimensions.apps.DimensionsConfig',
+	'financials.apps.FinancialsConfig',
 ]
 
 MIDDLEWARE = [

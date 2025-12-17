@@ -29,7 +29,13 @@ class BaseDimensionListCreateView(APIView):
 	def post(self, request):
 		serializer = self.serializer_class(data=request.data)
 		if serializer.is_valid():
-			serializer.save(company=request.user.company_roles.first().company)
+			user_role = request.user.company_roles.first()
+			if not user_role:
+				return Response(
+					{"detail": "Пользователь не привязан к компании"},
+					status=status.HTTP_400_BAD_REQUEST
+				)
+			serializer.save(company=user_role.company)
 			return Response(serializer.data, status=status.HTTP_201_CREATED)
 		return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

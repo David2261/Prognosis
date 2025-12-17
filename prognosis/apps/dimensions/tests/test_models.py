@@ -1,7 +1,7 @@
 import pytest
 from django.contrib.auth import get_user_model
-from apps.accounts.models import Company
-from apps.dimensions.models import ChartOfAccounts, BudgetArticle, CostCenter, Department, Project
+from accounts.models import Company
+from dimensions.models import ChartOfAccounts, BudgetArticle, CostCenter, Department, Project
 
 User = get_user_model()
 

@@ -81,13 +81,15 @@ class TimePeriod(CompanyRelatedModel):
 		return f"{self.year} ({self.company})"
 
 	def clean(self):
-		# Валидация: если месяц указан — квартал тоже должен быть, и наоборот
-		if self.month and not self.quarter:
-			raise ValidationError(_("Если указан месяц, должен быть указан квартал"))
-		if self.quarter and self.month:
+		if self.month is not None and self.quarter is not None:
 			expected_quarter = (self.month - 1) // 3 + 1
 			if self.quarter != expected_quarter:
-				raise ValidationError(_("Квартал не соответствует месяцу"))
+				raise ValidationError(_("Квартал не соответствует указанному месяцу"))
+
+	def save(self, *args, **kwargs):
+		if self.month is not None and self.quarter is None:
+			self.quarter = (self.month - 1) // 3 + 1
+		super().save(*args, **kwargs)
 
 
 class Scenario(CompanyRelatedModel):
@@ -142,12 +144,9 @@ class Scenario(CompanyRelatedModel):
 		verbose_name = _("Сценарий")
 		verbose_name_plural = _("Сценарии")
 		unique_together = ("company", "name", "version")
-		# Ensure slug unique per company
-		indexes = [
-			models.Index(fields=["company", "slug"]),
-		]
 		ordering = ["-created_at"]
 		indexes = [
+			models.Index(fields=["company", "slug"]),
 			models.Index(fields=["company", "type", "is_active"]),
 		]
 

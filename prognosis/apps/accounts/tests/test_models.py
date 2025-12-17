@@ -1,7 +1,7 @@
 import datetime
 
 import pytest
-from apps.accounts.models import Company, UserCompanyRole
+from accounts.models import Company, UserCompanyRole
 
 
 @pytest.mark.django_db

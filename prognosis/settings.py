@@ -20,8 +20,6 @@ DEBUG = env.bool('DEBUG', default=False)
 ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=['localhost', '127.0.0.1'])
 
 
-# Application definition
-
 INSTALLED_APPS = [
 	"unfold",
 	'django.contrib.admin',
@@ -38,6 +36,7 @@ INSTALLED_APPS = [
 	'apps.authentication',
 	'apps.accounts',
 	'apps.core',
+	'apps.dimensions',
 ]
 
 MIDDLEWARE = [
@@ -100,7 +99,8 @@ if not DEBUG:
 TEMPLATES = [
 	{
 		'BACKEND': 'django.template.backends.django.DjangoTemplates',
-		'DIRS': [],
+		# include project-level templates folder so custom admin templates are found
+		'DIRS': [BASE_DIR / 'prognosis' / 'templates', BASE_DIR / 'templates'],
 		'APP_DIRS': True,
 		'OPTIONS': {
 			'context_processors': [

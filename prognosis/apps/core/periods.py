@@ -23,4 +23,30 @@ def get_current_period(company, granularity="month") -> TimePeriod:
 
 def generate_periods_for_year(company, year: int):
 	"""Генерирует 12 месяцев + 4 квартала + год для указанного года"""
-	# ... логика создания
+	created = []
+
+	# year-level period
+	y, was_created = TimePeriod.objects.get_or_create(
+		company=company, year=year, quarter=None, month=None
+	)
+	if was_created:
+		created.append(y)
+
+	# quarters
+	for q in range(1, 5):
+		p, was_created = TimePeriod.objects.get_or_create(
+			company=company, year=year, quarter=q, month=None
+		)
+		if was_created:
+			created.append(p)
+
+	# months
+	for m in range(1, 13):
+		q = (m - 1) // 3 + 1
+		p, was_created = TimePeriod.objects.get_or_create(
+			company=company, year=year, quarter=q, month=m
+		)
+		if was_created:
+			created.append(p)
+
+	return created

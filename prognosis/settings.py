@@ -36,6 +36,7 @@ INSTALLED_APPS = [
 	'core.apps.CoreConfig',
 	'dimensions.apps.DimensionsConfig',
 	'financials.apps.FinancialsConfig',
+	'data_ingestion.apps.DataIngestionConfig',
 ]
 
 MIDDLEWARE = [
@@ -98,7 +99,6 @@ if not DEBUG:
 TEMPLATES = [
 	{
 		'BACKEND': 'django.template.backends.django.DjangoTemplates',
-		# include project-level templates folder so custom admin templates are found
 		'DIRS': [BASE_DIR / 'prognosis' / 'templates', BASE_DIR / 'templates'],
 		'APP_DIRS': True,
 		'OPTIONS': {
@@ -107,6 +107,7 @@ TEMPLATES = [
 				'django.contrib.auth.context_processors.auth',
 				'django.contrib.messages.context_processors.messages',
 			],
+			'builtins': ['prognosis.templatetags.unfold_extras'],
 		},
 	},
 ]
@@ -163,10 +164,12 @@ USE_I18N = True
 USE_TZ = True
 
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/5.2/howto/static-files/
+CELERY_BROKER_URL = 'redis://localhost:6379/0'
+CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
 
 STATIC_URL = 'static/'
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field

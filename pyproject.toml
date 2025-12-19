@@ -17,6 +17,8 @@ psycopg2-binary = "^2.9.11"
 gunicorn = "^23.0.0"
 django-unfold = "^0.73.1"
 django-treebeard = "^4.8.0"
+pandas = "^2.3.3"
+celery = "^5.6.0"
 
 [tool.poetry.group.dev.dependencies]
 flake8 = "^7.3.0"

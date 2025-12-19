@@ -147,7 +147,8 @@ venv/
 ENV/
 env.bak/
 venv.bak/
-
+media/*
+!media/.gitkeep
 # Spyder project settings
 .spyderproject
 .spyproject

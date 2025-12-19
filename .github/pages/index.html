@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Prognosis — открытая FP&A платформа для бюджетирования, прогнозирования и многомерного финансового анализа с элементами искусственного интеллекта">
+    <title>Prognosis — FP&A платформа с ИИ</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="./source/logo/finance.png"/>
+    <style>
+        :root {
+            --primary: #0ea5e9;
+            --primary-light: #38bdf8;
+            --primary-dark: #0284c7;
+            --bg: #0f172a;
+            --bg-light: #1e293b;
+            --text: #f1f5f9;
+            --text-secondary: #cbd5e1;
+            --text-muted: #94a3b8;
+            --card: rgba(30, 41, 59, 0.6);
+            --border: rgba(148, 163, 184, 0.15);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        header {
+            padding: 2rem 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary-light), var(--primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.9rem 2rem;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            text-decoration: none;
+            border-radius: 12px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(14, 165, 233, 0.3);
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(14, 165, 233, 0.5);
+        }
+
+        /* Hero with 3D phone mockup */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-bg {
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 50% 50%, rgba(14, 165, 233, 0.1) 0%, transparent 70%);
+            animation: pulse 20s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.4; transform: scale(1); }
+            50% { opacity: 0.7; transform: scale(1.05); }
+        }
+
+        .hero-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+            z-index: 2;
+        }
+
+        .hero-text h1 {
+            font-size: clamp(3.5rem, 7vw, 6rem);
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+        }
+
+        .hero-text .subtitle {
+            font-size: 1.8rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+        }
+
+        .hero-text .tagline {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            opacity: 0.9;
+            margin-bottom: 3rem;
+        }
+
+        h1 {
+            font-size: clamp(3rem, 8vw, 5.5rem);
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            line-height: 1.1;
+        }
+
+        .subtitle {
+            font-size: clamp(1.4rem, 4vw, 2rem);
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+            font-weight: 500;
+        }
+
+        .tagline {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            max-width: 800px;
+            margin: 0 auto 3rem;
+        }
+
+        section {
+            padding: 6rem 0;
+        }
+
+        h2 {
+            font-size: clamp(2.5rem, 6vw, 3.5rem);
+            text-align: center;
+            margin-bottom: 4rem;
+            font-weight: 600;
+        }
+
+        .description {
+            max-width: 900px;
+            margin: 0 auto 4rem;
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            text-align: center;
+            line-height: 1.8;
+        }
+
+        .highlight {
+            color: var(--primary-light);
+            font-weight: 600;
+        }
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+        }
+
+        .card {
+            background: var(--card);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 2.5rem;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+        }
+
+        .card-icon {
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .card p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+
+        /* Фон hero с пульсацией */
+        .hero-bg {
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 50% 50%, rgba(14, 165, 233, 0.1) 0%, transparent 70%);
+            animation: pulse 20s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.4; transform: scale(1); }
+            50% { opacity: 0.7; transform: scale(1.05); }
+        }
+
+        /* Hero теперь grid с текстом и 3D-телефоном */
+        .hero-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+            z-index: 2;
+        }
+
+        /* 3D-смартфон */
+        .phone-mockup {
+            perspective: 2000px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .phone {
+            width: 380px;
+            height: 760px;
+            background: #000;
+            border-radius: 40px;
+            padding: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.8);
+            position: relative;
+            transform: rotateY(-25deg) rotateX(10deg);
+            transition: transform 0.6s ease;
+            animation: float 8s ease-in-out infinite;
+        }
+
+        .phone:hover {
+            transform: rotateY(-20deg) rotateX(5deg) scale(1.05);
+        }
+
+        @keyframes float {
+            0%, 100% { transform: rotateY(-25deg) rotateX(10deg) translateY(0); }
+            50% { transform: rotateY(-25deg) rotateX(10deg) translateY(-20px); }
+        }
+
+        .screen {
+            width: 100%;
+            height: 100%;
+            background: #111;
+            border-radius: 30px;
+            overflow: hidden;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 40px 20px;
+        }
+
+        .screen-header {
+            text-align: center;
+            color: #fff;
+            font-size: 1.8rem;
+            font-weight: 600;
+        }
+
+        .cards-mock {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            padding: 0 10px;
+        }
+
+        .mock-card {
+            background: rgba(139, 92, 246, 0.15);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 8px 32px rgba(139, 92, 246, 0.2);
+        }
+
+        .mock-card.green { 
+            background: rgba(34, 197, 94, 0.15); 
+            border-color: rgba(34, 197, 94, 0.3); 
+            box-shadow: 0 8px 32px rgba(34, 197, 94, 0.2); 
+        }
+        .mock-card.yellow { 
+            background: rgba(250, 204, 21, 0.15); 
+            border-color: rgba(250, 204, 21, 0.3); 
+            box-shadow: 0 8px 32px rgba(250, 204, 21, 0.2); 
+        }
+
+        .mock-card h3 { color: white; font-size: 1.2rem; margin-bottom: 0.5rem; }
+        .mock-card p { color: rgba(255,255,255,0.9); font-size: 1.8rem; font-weight: 700; }
+
+        .screen-footer {
+            text-align: center;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 968px) {
+            .hero-content { grid-template-columns: 1fr; text-align: center; }
+            .phone { transform: none; animation: none; width: 320px; height: 640px; }
+        }
+
+        .tech {
+            text-align: center;
+            padding: 4rem 0;
+            background: var(--bg-light);
+        }
+
+        .tech-logos {
+            display: flex;
+            justify-content: center;
+            gap: 4rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .tech-logo {
+            font-size: 3rem;
+            color: var(--text-secondary);
+            transition: color 0.3s ease;
+        }
+
+        .tech-logo:hover {
+            color: var(--primary-light);
+        }
+
+        .tech-logos img {
+            transition: transform 0.3s ease, filter 0.3s ease;
+            object-fit: contain;
+        }
+
+        .tech-logos .tech-logo:hover img {
+            transform: scale(1.15) rotate(5deg);
+            filter: brightness(1.3) drop-shadow(0 0 20px rgba(14, 165, 233, 0.5));
+        }
+
+
+        .roadmap {
+            background: linear-gradient(135deg, rgba(14, 165, 233, 0.08), rgba(2, 132, 199, 0.08));
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .roadmap-content {
+            text-align: center;
+        }
+
+        .roadmap h2 {
+            margin-bottom: 2rem;
+        }
+
+        .roadmap-item {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .release-date {
+            font-size: 3rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary-light), var(--primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1.5rem;
+        }
+
+        .roadmap-text {
+            font-size: 1.15rem;
+            color: var(--text-secondary);
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+
+        .roadmap-note {
+            font-size: 1rem;
+            color: var(--text-muted);
+            font-style: italic;
+            margin-top: 1.5rem;
+        }
+
+        footer {
+            padding: 3rem 0;
+            text-align: center;
+            border-top: 1px solid var(--border);
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        footer a {
+            color: var(--primary-light);
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            .container { padding: 0 1.5rem; }
+            .cards { grid-template-columns: 1fr; }
+            .tech-logos { gap: 2rem; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">Prognosis</div>
+                <a href="https://github.com/David2261/Prognosis" class="btn" target="_blank" rel="noopener">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                    </svg>
+                    GitHub
+                </a>
+            </div>
+        </div>
+    </header>
+    <main>
+        <section class="hero">
+            <div class="container">
+                <div class="hero-content">
+                    <div class="hero-text">
+                        <h1>Prognosis</h1>
+                        <p class="subtitle">Современная FP&A платформа</p>
+                        <p class="tagline">Бюджетирование • Прогнозирование • Многомерный анализ • Автоматизация рутины</p>
+                        <a href="https://github.com/David2261/Prognosis" class="btn" target="_blank" rel="noopener">
+                            Посмотреть на GitHub
+                        </a>
+                    </div>
+                    <div class="phone-mockup">
+                        <div class="phone">
+                            <div class="screen">
+                                <div class="screen-header">Prognosis</div>
+                                <div class="cards-mock">
+                                    <div class="mock-card">
+                                        <h3>Аналитика</h3>
+                                        <p>$22,850</p>
+                                    </div>
+                                    <div class="mock-card green">
+                                        <h3>Награды</h3>
+                                        <p>2.5%</p>
+                                    </div>
+                                    <div class="mock-card yellow">
+                                        <h3>Прогноз</h3>
+                                        <p>+42.8%</p>
+                                    </div>
+                                </div>
+                                <div class="screen-footer">© Prognosis</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="about">
+            <div class="container">
+                <h2>От Excel к интеллектуальной аналитике</h2>
+                <div class="description">
+                    <p>
+                        Prognosis — это открытая платформа для финансового планирования и анализа (FP&A),
+                        которая объединяет данные, аналитику и автоматизацию. Мы помогаем финансовым командам
+                        перейти от ручной работы в таблицах к <span class="highlight">умным сценариям, точным прогнозам и прозрачным отчётам</span>.
+                    </p>
+                    <p style="margin-top: 2rem;">
+                        Искусственный интеллект встроен в ядро системы: автоматическое обнаружение аномалий,
+                        интеллектуальные прогнозы, объяснение изменений — всё это делает анализ глубже,
+                        а решения — обоснованнее.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section id="features">
+            <div class="container">
+                <h2>Возможности</h2>
+                <div class="cards">
+                    <div class="card">
+                        <div class="card-icon">📊</div>
+                        <h3>Гибкое бюджетирование</h3>
+                        <p>Версии бюджетов, workflow согласований, контроль исполнения, план-факт анализ</p>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon">🔮</div>
+                        <h3>Интеллектуальные прогнозы</h3>
+                        <p>Автоматические модели, сценарии «что-если», rolling forecasts, объяснимый ИИ</p>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon">🌐</div>
+                        <h3>Многомерный анализ</h3>
+                        <p>Измерения: статьи, ЦФО, проекты, подразделения, счета — уникальность по всем комбинациям</p>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon">📈</div>
+                        <h3>Консолидация и отчётность</h3>
+                        <p>Автоматический сбор данных, P&L, Cash Flow, управленческие дашборды</p>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon">📥</div>
+                        <h3>Импорт и интеграции</h3>
+                        <p>Загрузка из Excel/CSV, подготовка к интеграциям с ERP, банками, CRM</p>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon">🤝</div>
+                        <h3>Multi-tenant</h3>
+                        <p>Полная изоляция данных по компаниям, ролевая модель доступа</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="tech">
+            <div class="container">
+                <h2 style="color: var(--text-secondary);">Технологии</h2>
+                <p style="text-align: center; color: var(--text-muted); margin-bottom: 3rem;">
+                    Основа — Django (бэкенд) и React (фронтенд)
+                </p>
+                <div class="tech-logos">
+                    <div class="tech-logo" title="Django">
+                        <img src="source/images/django.png" alt="Django" style="height: 120px; width: auto; border-radius: 12px; filter: brightness(1.1);">
+                    </div>
+                    <div class="tech-logo" title="React">
+                        <img src="source/images/react.jpg" alt="React" style="height: 120px; width: auto; border-radius: 12px;">
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="roadmap">
+            <div class="container">
+                <div class="roadmap-content">
+                    <h2>Запуск платформы</h2>
+                    <div class="roadmap-item">
+                        <div class="release-date">1 июня 2026</div>
+                        <p class="roadmap-text">
+                            Первый релиз Prognosis начнётся в начале лета 2026 года. Мы подготовим для вас
+                            полнофункциональную платформу с интегрированным ИИ для финансовой аналитики.
+                        </p>
+                        <p class="roadmap-note">
+                            Дополнительная информация и возможность зарегистрировать заявку станут доступны немного позже.
+                            Следите за обновлениями в наших репозиториях и социальных сетях.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Prognosis — открытая FP&A платформа</p>
+            <p style="margin-top: 0.5rem;">
+                <a href="https://github.com/David2261/Prognosis" target="_blank" rel="noopener">GitHub репозиторий</a>
+            </p>
+        </div>
+    </footer>
+</body>
+</html>

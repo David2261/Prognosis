@@ -20,7 +20,6 @@ class TestDimensionModels:
         c = Company.objects.create(name='CompY')
         ba = BudgetArticle.add_root(company=c, code='R1', name='Revenue')
         assert ba.slug
-        # adding same name in same company should produce unique slug
         ba2 = BudgetArticle.add_root(company=c, code='R2', name='Revenue')
         assert ba2.slug != ba.slug
 

@@ -37,6 +37,7 @@ INSTALLED_APPS = [
 	'dimensions.apps.DimensionsConfig',
 	'financials.apps.FinancialsConfig',
 	'data_ingestion.apps.DataIngestionConfig',
+	'reports.apps.ReportsConfig',
 ]
 
 MIDDLEWARE = [

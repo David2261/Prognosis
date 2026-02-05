@@ -1,3 +1,4 @@
+from prognosis.apps.data_ingestion.tests.test_serializers import scenario
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -17,19 +18,26 @@ class FinancialLineListCreateView(APIView):
 			"scenario", "period",
 			"article", "cost_center",
 			"department", "project", "account"
-		)
+		).prefetch_related()
 
 	def get(self, request):
 		queryset = self.get_queryset()
 
 		# Filters (examples:
-		# ?scenario=slug-or-id, ?period=YYYY-MM or id, ?article=slug-or-id)
 		scenario_q = request.query_params.get("scenario")
 		period_q = request.query_params.get("period")
 		article_q = request.query_params.get("article")
+		company_q = request.query_params.get("company")
+
+		if company_q:
+			if request.user.company_roles.filter(company_id=company_q).exists():
+				queryset = queryset.filter(company_id=company_q)
+			else:
+				return Response(
+					{"detail": "You do not have access to this company."},
+					status=status.HTTP_403_FORBIDDEN)
 
 		if scenario_q:
-			# accept either numeric id or slug
 			if scenario_q.isdigit():
 				queryset = queryset.filter(scenario_id=int(scenario_q))
 			else:
@@ -65,59 +73,73 @@ class FinancialLineListCreateView(APIView):
 		return Response(serializer.data)
 
 	def post(self, request):
-		serializer = FinancialLineSerializer(
-			data=request.data,
-			context={'request': request})
-		if serializer.is_valid():
+		# Определяем компанию: либо из данных, либо из первой доступной роли
+		company_id = request.data.get("company")
+
+		if company_id:
+			# Проверяем, имеет ли пользователь доступ к указанной компании
+			if not request.user.company_roles.filter(company_id=company_id).exists():
+				return Response(
+					{"detail": "You do not have permission to create data for this company."},
+					status=status.HTTP_403_FORBIDDEN
+				)
+		else:
+			# Если не указана — берём первую доступную компанию пользователя
 			user_role = request.user.company_roles.first()
 			if not user_role:
 				return Response(
-					{"detail": "User not associated with any company."},
-					status=status.HTTP_400_BAD_REQUEST)
-			serializer.save(company=user_role.company)
+					{"detail": "User is not associated with any company."},
+					status=status.HTTP_400_BAD_REQUEST
+				)
+			company_id = user_role.company_id
+			request.data["company"] = company_id
+
+		serializer = FinancialLineSerializer(
+			data=request.data,
+			context={'request': request}
+		)
+		if serializer.is_valid():
+			serializer.save()
 			return Response(serializer.data, status=status.HTTP_201_CREATED)
+
 		return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class FinancialLineDetailView(APIView):
 	permission_classes = [IsAuthenticated]
 
-	def get_object(self, pk):
+	def get_object(self, slug):
+		user = self.request.user
+		company_ids = user.company_roles.values_list('company_id', flat=True)
+
 		return get_object_or_404(
 			FinancialLine,
-			pk=pk,
-			company__user_roles__user=self.request.user
+			slug=slug,
+			company_id__in=company_ids
 		)
 
-	def get(self, request, pk):
-		obj = self.get_object(pk)
+	def get(self, request, slug):
+		obj = self.get_object(slug)
 		serializer = FinancialLineSerializer(obj)
 		return Response(serializer.data)
 
-	def put(self, request, pk):
-		obj = self.get_object(pk)
-		serializer = FinancialLineSerializer(
-			obj,
-			data=request.data,
-			context={"request": request})
+	def put(self, request, slug):
+		obj = self.get_object(slug)
+		serializer = FinancialLineSerializer(obj, data=request.data, context={'request': request})
 		if serializer.is_valid():
 			serializer.save()
 			return Response(serializer.data)
 		return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-	def patch(self, request, pk):
-		obj = self.get_object(pk)
-		serializer = FinancialLineSerializer(
-			obj,
-			data=request.data,
-			partial=True,
-			context={"request": request})
+	def patch(self, request, slug):
+		obj = self.get_object(slug)
+		serializer = FinancialLineSerializer(obj, data=request.data, partial=True, context={'request': request})
 		if serializer.is_valid():
 			serializer.save()
 			return Response(serializer.data)
 		return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-	def delete(self, request, pk):
-		obj = self.get_object(pk)
+	def delete(self, request, slug):
+		obj = self.get_object(slug)
 		obj.delete()
 		return Response(status=status.HTTP_204_NO_CONTENT)

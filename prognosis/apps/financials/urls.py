@@ -9,7 +9,7 @@ urlpatterns = [
 		FinancialLineListCreateView.as_view(),
 		name='financialline-list-create'),
 	path(
-		'v1/lines/<slug:pk>/',
+		'v1/lines/<str:slug>/',
 		FinancialLineDetailView.as_view(),
 		name='financialline-detail'),
 ]

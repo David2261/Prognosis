@@ -1,4 +1,5 @@
 from django.contrib import admin
+from .settings import DEBUG
 from django.urls import path, include
 
 urlpatterns = [
@@ -11,3 +12,9 @@ urlpatterns = [
 	path('api/data_ingestion/', include('data_ingestion.urls')),
 	path('api/reports/', include('reports.urls')),
 ]
+
+if DEBUG:
+    urlpatterns += [
+        path("silk/", include("silk.urls")),
+        path("__debug__/", include("debug_toolbar.urls"))
+    ]

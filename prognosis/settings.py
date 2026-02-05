@@ -40,7 +40,53 @@ INSTALLED_APPS = [
 	'reports.apps.ReportsConfig',
 ]
 
-MIDDLEWARE = [
+
+MIDDLEWARE = []
+
+
+if DEBUG:
+	INSTALLED_APPS += [
+		"silk",
+		"debug_toolbar",
+		]
+	MIDDLEWARE += [
+		'silk.middleware.SilkyMiddleware',
+		"debug_toolbar.middleware.DebugToolbarMiddleware",
+	]
+
+	INTERNAL_IPS = ["127.0.0.1", "localhost"]
+
+	SILKY_AUTHENTICATION = lambda request: request.user.is_staff
+	SILKY_AUTHORISATION = lambda request: request.user.is_superuser
+
+	SILKY_MAX_REQUESTS = 10000
+	SILKY_MAX_QUERIES = 10000
+	SILKY_RETENTION_PERIOD = 90
+
+	SILKY_PYTHON_PROFILER = True
+
+	DEBUG_TOOLBAR_CONFIG = {
+		"SHOW_TOOLBAR_CALLBACK": lambda request: True,
+		"RESULTS_CACHE_SIZE": 50,
+	}
+
+	DEBUG_TOOLBAR_PANELS = [
+		"debug_toolbar.panels.history.HistoryPanel",
+		"debug_toolbar.panels.versions.VersionsPanel",
+		"debug_toolbar.panels.timer.TimerPanel",
+		"debug_toolbar.panels.settings.SettingsPanel",
+		"debug_toolbar.panels.headers.HeadersPanel",
+		"debug_toolbar.panels.request.RequestPanel",
+		"debug_toolbar.panels.sql.SQLPanel",
+		"debug_toolbar.panels.staticfiles.StaticFilesPanel",
+		"debug_toolbar.panels.templates.TemplatesPanel",
+		"debug_toolbar.panels.cache.CachePanel",
+		"debug_toolbar.panels.signals.SignalsPanel",
+		"debug_toolbar.panels.redirects.RedirectsPanel",
+	]
+
+
+MIDDLEWARE += [
 	'corsheaders.middleware.CorsMiddleware',
 	'django.middleware.security.SecurityMiddleware',
 	'django.contrib.sessions.middleware.SessionMiddleware',
@@ -50,6 +96,7 @@ MIDDLEWARE = [
 	'django.contrib.messages.middleware.MessageMiddleware',
 	'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
 
 ROOT_URLCONF = 'prognosis.urls'
 
